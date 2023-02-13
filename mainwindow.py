@@ -3,7 +3,7 @@ from ui_mainwindow import Ui_MainWindow
 import xlrd
 import copy
 import pathlib
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QListView, QMessageBox, QTableWidgetItem
+from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem
 
 
 
@@ -11,17 +11,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
         self.setupUi(self)
-
-
-        # self.Title.setText("hello Python")
-
         self.pushButton.setShortcut('Return')
         self.pushButton.clicked.connect(self.onpushButtonClicked)
-
         self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
-        # self.World.clicked.connect(self.onWorldClicked)
-        # self.China.clicked.connect(self.onChinaClicked)
-        # self.lineEdit.textChanged.connect(self.onlineEditTextChanged)
 
 
     def onpushButtonClicked(self):
@@ -31,21 +23,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.checkvalue(findVal)
         else:
             QMessageBox.information(self, '抱歉', '请输入需要查询的IP地址')
-
-    # def onWorldClicked(self, remark):
-    #     self.Title.setText("Hello World")
-
-
-    # def onChinaClicked(self):
-    #     # self.Title.setText("Hello China")
-    #     findVal = self.lineEdit_3.text()
-    #     # print(findVal)
-    #     if findVal != "":
-    #         self.checkvalue(findVal)
-
-
-    # def onlineEditTextChanged(self, p_str):
-    #     self.Title.setText(p_str)
 
     def printFinder(val):
         print(val)
@@ -83,9 +60,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                             else:
                                 result.append(str(sheet_1.row(rowNum)[cnt].value))
 
-
-        # return copy.deepcopy(findout)
-        # print(result)
         return result
 
     def checkvalue(self,val):
@@ -98,8 +72,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # 在每一个文件中查找目标数据
         if filelist:
             for filetp in filelist:
-                # findout = self.rdusefile(filetp, val)
-                # print(self.rdusefile(filetp, val))
+
                 if self.rdusefile(filetp, val):
                     check.extend(self.rdusefile(filetp, val))
 
@@ -118,23 +91,4 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
                 else:
                     QMessageBox.information(self, '抱歉', '没有找到！')
-        # self.lineEdit.setText(str(findout))
-        # if findout:
-        #     self.add(findout)
-        # else:
-        #     QMessageBox.information(self, '抱歉', '没有找到！')
-
-
-
-
-
-    # # 查字符在哪里
-    # while (1):
-    #     print("\n将要找的文件放在同一个文件夹里哦 =。=")
-    #     findVal = input("请输入要找的字:")
-    #     if findVal != "":
-    #         checkall = checkvalue(findVal)
-    #         print(str(checkall))
-    #         print
-
 
