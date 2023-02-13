@@ -6,7 +6,6 @@ import pathlib
 from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem
 
 
-
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
@@ -14,7 +13,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton.setShortcut('Return')
         self.pushButton.clicked.connect(self.onpushButtonClicked)
         self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
-
 
     def onpushButtonClicked(self):
         findVal = str(self.lineEdit_3.text())
@@ -34,7 +32,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         usefile = [str(tpfile) for tpfile in excelfile]
         return copy.deepcopy(usefile)
 
-    def rdusefile(self,fileName, checkvalue):
+    def rdusefile(self, fileName, checkvalue):
         # 读一个文件，并在文件单元格中查找目标数据，如果找到就返回文件名及数据
         data = xlrd.open_workbook(fileName)  # 打开当前目录下名为 fileName 的文档
 
@@ -62,21 +60,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         return result
 
-    def checkvalue(self,val):
-        # 在当前目录的所有Excel表里找一个字符的位置
-        # 获取当前目录内所有Excel 文件列表
-        # print("咔哒咔哒,工作拉 ^。^  开始找  " + val)
+    def checkvalue(self, val):
         filelist = self.getusefile()
         check = []
-        items=[]
-        # 在每一个文件中查找目标数据
+        items = []
         if filelist:
             for filetp in filelist:
 
                 if self.rdusefile(filetp, val):
                     check.extend(self.rdusefile(filetp, val))
 
-                    items.insert(2,self.rdusefile(filetp, val)[:])
+                    items.insert(2, self.rdusefile(filetp, val)[:])
                     for i in reversed(range(self.tableWidget.rowCount())):
                         self.tableWidget.removeRow(i)
 
@@ -91,4 +85,3 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
                 else:
                     QMessageBox.information(self, '抱歉', '没有找到！')
-
