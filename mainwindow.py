@@ -3,27 +3,9 @@ from ui_mainwindow import Ui_MainWindow
 import xlrd
 import copy
 import pathlib
-from PyQt5.QtWidgets import QApplication, QWidget , QVBoxLayout , QListView
+from PyQt5.QtWidgets import QApplication, QWidget , QVBoxLayout , QListView,QMessageBox
 from PyQt5.QtCore import QStringListModel
 
-class ListViewDemo(QWidget, Ui_MainWindow):
-    def __init__(self, parent=None):
-        super(ListViewDemo, self).__init__(parent)
-        self.setupUi(self)
-        layout = QVBoxLayout()
-
-        listView = QListView()  # 创建一个listview对象
-        slm = QStringListModel();  # 创建mode
-        self.qList = MainWindow.findout  # 添加的数组数据
-        slm.setStringList(self.qList)  # 将数据设置到model
-        listView.setModel(slm)  ##绑定 listView 和 model
-        listView.clicked.connect(self.clickedlist)  # listview 的点击事件
-        layout.addWidget(listView)  # 将list view添加到layout
-        self.setLayout(layout)  # 将lay 添加到窗口
-
-    def clickedlist(self, qModelIndex):
-        QMessageBox.information(self, "QListView", "你选择了: " + self.qList[qModelIndex.row()])
-        print("点击的是：" + str(qModelIndex.row()))
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -56,6 +38,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # print(findVal)
         if findVal != "":
             self.checkvalue(findVal)
+        else:
+            QMessageBox.information(self, '抱歉', '请输入需要查询的IP地址')
 
     # def onWorldClicked(self, remark):
     #     self.Title.setText("Hello World")
@@ -95,7 +79,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             nrows = sheet_1.nrows  # 获取该sheet中的有效行数
             ncols = sheet_1.ncols  # 获取该sheet中的有效列数
             getdata = []
-
+            result = []
             # 读取文件数据
             for rowNum in range(0, nrows):
                 tep1 = []
@@ -117,6 +101,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # 获取当前目录内所有Excel 文件列表
         # print("咔哒咔哒,工作拉 ^。^  开始找  " + val)
         filelist = self.getusefile()
+
         check = []
         # 在每一个文件中查找目标数据
         if filelist:
@@ -124,8 +109,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 findout = self.rdusefile(filetp, val)
                 if findout:
                     check.extend(findout)
+                    self.add(findout)
+                else:
+                    QMessageBox.information(self, '抱歉', '没有找到！')
         # self.lineEdit.setText(str(findout))
-        self.add(findout)
+        # if findout:
+        #     self.add(findout)
+        # else:
+        #     QMessageBox.information(self, '抱歉', '没有找到！')
+
 
 
 
