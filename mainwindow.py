@@ -17,6 +17,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.pushButton.setShortcut('Return')
         self.pushButton.clicked.connect(self.onpushButtonClicked)
+
+        self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         # self.World.clicked.connect(self.onWorldClicked)
         # self.China.clicked.connect(self.onChinaClicked)
         # self.lineEdit.textChanged.connect(self.onlineEditTextChanged)
