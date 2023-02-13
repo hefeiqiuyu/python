@@ -3,7 +3,7 @@ from ui_mainwindow import Ui_MainWindow
 import xlrd
 import copy
 import pathlib
-from PyQt5.QtWidgets import QApplication, QWidget , QVBoxLayout , QListView,QMessageBox
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QListView, QMessageBox, QTableWidgetItem
 from PyQt5.QtCore import QStringListModel
 
 
@@ -34,7 +34,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def onpushButtonClicked(self):
-        findVal = self.lineEdit_3.text()
+        findVal = str(self.lineEdit_3.text())
         # print(findVal)
         if findVal != "":
             self.checkvalue(findVal)
@@ -56,8 +56,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     # def onlineEditTextChanged(self, p_str):
     #     self.Title.setText(p_str)
 
-    # def printFinder(val):
-    #     print(val)
+    def printFinder(val):
+        print(val)
 
     def getusefile(self):
         # 查当前目录下所有xls xlsx文件，返回文件名列表
@@ -72,28 +72,26 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         worksheets = data.sheet_names()  # 返回book中所有工作表的名字
         findout = []
-
+        result = []
         for filenum in range(len(worksheets)):
             # 打开excel文件的第filenum张表
             sheet_1 = data.sheets()[filenum]  # 通过索引顺序获取sheet表
             nrows = sheet_1.nrows  # 获取该sheet中的有效行数
             ncols = sheet_1.ncols  # 获取该sheet中的有效列数
-            getdata = []
-            result = []
+
             # 读取文件数据
             for rowNum in range(0, nrows):
-                tep1 = []
                 for colNum in range(0, ncols):
-                    # tep1.append(sheet_1.row(rowNum)[colNum].value)
                     if checkvalue in str(sheet_1.row(rowNum)[colNum].value):
                         result = []
                         local = fileName.split('.')
-                        result.append("文件:" + fileName + " 的表 " + worksheets[filenum] + " 找到了 ")
+                        result.append(fileName + "表" + worksheets[filenum])
                         for cnt in range(0, ncols):
                             result.append(str(sheet_1.row(rowNum)[cnt].value))
-                        # self.printFinder(result)
+
 
         # return copy.deepcopy(findout)
+        # print(result)
         return result
 
     def checkvalue(self,val):
@@ -101,15 +99,28 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # 获取当前目录内所有Excel 文件列表
         # print("咔哒咔哒,工作拉 ^。^  开始找  " + val)
         filelist = self.getusefile()
-
         check = []
+        items=[]
         # 在每一个文件中查找目标数据
         if filelist:
             for filetp in filelist:
-                findout = self.rdusefile(filetp, val)
-                if findout:
-                    check.extend(findout)
-                    self.add(findout)
+                # findout = self.rdusefile(filetp, val)
+                # print(self.rdusefile(filetp, val))
+                if self.rdusefile(filetp, val):
+                    check.extend(self.rdusefile(filetp, val))
+
+                    # items = items[self.rdusefile(filetp, val)]
+                    items.insert(2,self.rdusefile(filetp, val)[:])
+                    print(items)
+                    for i in range(len(items)):
+                        item = items[i]
+                        row = self.tableWidget.rowCount()
+                        self.tableWidget.insertRow(row)
+                        for j in range(len(item)):
+                            print(str(items[i][j]))
+                            item = QTableWidgetItem(str(items[i][j]))
+                            self.tableWidget.setItem(row, j, item)
+                    self.add(self.rdusefile(filetp, val))
                 else:
                     QMessageBox.information(self, '抱歉', '没有找到！')
         # self.lineEdit.setText(str(findout))
