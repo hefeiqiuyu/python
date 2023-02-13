@@ -7,6 +7,7 @@ if __name__ == '__main__':
     mainWindow = QMainWindow()
     ui = designer.Ui_MainWindow()
     ui.setupUi(mainWindow)
+    mainWindow.setFixedSize(660, 470)
     mainWindow.show()
 
     sys.exit(app.exec_())
