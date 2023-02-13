@@ -4,7 +4,7 @@ import xlrd
 import copy
 import pathlib
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QListView, QMessageBox, QTableWidgetItem
-from PyQt5.QtCore import QStringListModel
+
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -12,25 +12,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         super(MainWindow, self).__init__(parent)
         self.setupUi(self)
 
-        self.func_list()
+
         # self.Title.setText("hello Python")
+
+        self.pushButton.setShortcut('Return')
         self.pushButton.clicked.connect(self.onpushButtonClicked)
         # self.World.clicked.connect(self.onWorldClicked)
         # self.China.clicked.connect(self.onChinaClicked)
         # self.lineEdit.textChanged.connect(self.onlineEditTextChanged)
-
-    def func_list(self):
-        self.model = QStringListModel()
-        self.list = ['']
-        self.model.setStringList(self.list)
-        self.listView.setModel(self.model)
-
-    def add(self,val):
-        # print(self.lineEdit.text())
-        self.list=val
-        self.model.setStringList(self.list)
-        self.listView.setModel(self.model)
-        # print(self.list)
 
 
     def onpushButtonClicked(self):
@@ -87,7 +76,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                         local = fileName.split('.')
                         result.append(fileName + "表" + worksheets[filenum])
                         for cnt in range(0, ncols):
-                            result.append(str(sheet_1.row(rowNum)[cnt].value))
+                            if sheet_1.row(rowNum)[cnt].ctype == 2:
+                                result.append(str(int(sheet_1.row(rowNum)[cnt].value)))
+                            else:
+                                result.append(str(sheet_1.row(rowNum)[cnt].value))
 
 
         # return copy.deepcopy(findout)
@@ -109,18 +101,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 if self.rdusefile(filetp, val):
                     check.extend(self.rdusefile(filetp, val))
 
-                    # items = items[self.rdusefile(filetp, val)]
                     items.insert(2,self.rdusefile(filetp, val)[:])
-                    print(items)
+                    for i in reversed(range(self.tableWidget.rowCount())):
+                        self.tableWidget.removeRow(i)
+
                     for i in range(len(items)):
                         item = items[i]
+
                         row = self.tableWidget.rowCount()
                         self.tableWidget.insertRow(row)
                         for j in range(len(item)):
-                            print(str(items[i][j]))
                             item = QTableWidgetItem(str(items[i][j]))
                             self.tableWidget.setItem(row, j, item)
-                    self.add(self.rdusefile(filetp, val))
+
                 else:
                     QMessageBox.information(self, '抱歉', '没有找到！')
         # self.lineEdit.setText(str(findout))
