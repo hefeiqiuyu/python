@@ -31,7 +31,8 @@ def rdusefile(fileName, checkvalue):
         nrows = sheet_1.nrows  # 获取该sheet中的有效行数
         ncols = sheet_1.ncols  # 获取该sheet中的有效列数
         getdata = []
-
+        lable=['位置:', 'IP:', '单位:', '使用人:', '联系方式:']
+        print('搜索到以下信息：\n')
         # 读取文件数据
         for rowNum in range(0, nrows):
             tep1 = []
@@ -40,10 +41,19 @@ def rdusefile(fileName, checkvalue):
                 if checkvalue in str(sheet_1.row(rowNum)[colNum].value):
                     result = []
                     local = fileName.split('.')
-                    result.append("文件:" + fileName + " 的表 " + worksheets[filenum] + " 找到了 ")
+                    result.append(fileName + "表" + worksheets[filenum])
+                    print(lable[0]+result[0])
                     for cnt in range(0, ncols):
-                        result.append(str(sheet_1.row(rowNum)[cnt].value))
-                    printFinder(result)
+                        if isinstance(sheet_1.row(rowNum)[cnt].value, float):
+                            # print(type(sheet_1.row(rowNum)[cnt].value))
+                            result.append(str(int(sheet_1.row(rowNum)[cnt].value)))
+                            print(lable[cnt + 1] + str(int(sheet_1.row(rowNum)[cnt].value)))
+                        else:
+                            result.append(str(sheet_1.row(rowNum)[cnt].value))
+                            print(lable[cnt + 1] + str(sheet_1.row(rowNum)[cnt].value))
+
+                    print()
+                    # printFinder(result)
 
     return copy.deepcopy(findout)
 
@@ -51,7 +61,8 @@ def rdusefile(fileName, checkvalue):
 def checkvalue(val):
     # 在当前目录的所有Excel表里找一个字符的位置
     # 获取当前目录内所有Excel 文件列表
-    print("咔哒咔哒,工作拉 ^。^  开始找  " + val)
+    print("开始搜索  " + val)
+    print()
     filelist = getusefile()
     check = []
     # 在每一个文件中查找目标数据
@@ -65,8 +76,8 @@ def checkvalue(val):
 
 # 查字符在哪里
 while (1):
-    print("\n将要找的文件放在同一个文件夹里哦 =。=")
-    findVal = input("请输入要找的字:")
+    print("\n请将要找的excel文件放在同一个文件夹里")
+    findVal = input("请输入要找的关键字:")
     if findVal != "":
         checkall = checkvalue(findVal)
         print(str(checkall))
