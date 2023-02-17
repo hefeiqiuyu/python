@@ -1,9 +1,8 @@
-import time
-import os
+
 import xlrd
 import copy
 import pathlib
-import PyQt5
+
 
 
 def printFinder(val):
