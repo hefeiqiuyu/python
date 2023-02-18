@@ -30,8 +30,8 @@ def rdusefile(fileName, checkvalue):
         nrows = sheet_1.nrows  # 获取该sheet中的有效行数
         ncols = sheet_1.ncols  # 获取该sheet中的有效列数
         getdata = []
-        lable=['位置:', 'IP:', '单位:', '使用人:', '联系方式:']
-        print('搜索到以下信息：\n')
+        lable=['文件:', 'IP:', '类别:', '负责人:', '部职别:', '设备类别:', '用途:']
+
         # 读取文件数据
         for rowNum in range(0, nrows):
             tep1 = []
@@ -40,7 +40,7 @@ def rdusefile(fileName, checkvalue):
                 if checkvalue in str(sheet_1.row(rowNum)[colNum].value):
                     result = []
                     local = fileName.split('.')
-                    result.append(fileName + "表" + worksheets[filenum])
+                    result.append(fileName + "    表:" + worksheets[filenum])
                     print(lable[0]+result[0])
                     for cnt in range(0, ncols):
                         if isinstance(sheet_1.row(rowNum)[cnt].value, float):
@@ -60,7 +60,7 @@ def rdusefile(fileName, checkvalue):
 def checkvalue(val):
     # 在当前目录的所有Excel表里找一个字符的位置
     # 获取当前目录内所有Excel 文件列表
-    print("开始搜索  " + val)
+
     print()
     filelist = getusefile()
     check = []
@@ -78,7 +78,10 @@ while (1):
     print("\n请将要找的excel文件放在同一个文件夹里")
     findVal = input("请输入要找的关键字:")
     if findVal != "":
+        print("开始搜索  " + findVal)
+        print('搜索到以下信息：\n')
         checkall = checkvalue(findVal)
-        print(str(checkall))
+        if checkall:
+            print(str(checkall))
         print
 
